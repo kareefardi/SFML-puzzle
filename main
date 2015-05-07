@@ -1,0 +1,76 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+const int rows=12;
+	const int columns=12;
+	char grid[rows][columns];
+
+	bool checkM( char M[][columns], int i, int j, int t_i, int t_j)
+	{
+		if(i<0||i>rows||j<0||j>columns) return false;
+		if(i==t_i&&j==t_j)return true;
+		if(M[i][j]=='#')return false;
+		else
+			{
+				M[i][j] = '#'; 
+				return (checkM(M, i+1,j,t_i,t_j) ||
+				checkM(M, i,j-1,t_i,t_j) ||
+				checkM(M, i-1,j,t_i,t_j) ||
+				checkM(M, i,j+1,t_i,t_j));
+		}
+	}
+
+
+int main(){
+	ifstream input;
+	
+	string s;
+	int start_x,start_y,target_x,target_y;
+	int NumEnemies; int t;
+	int *B_x,*B_y;
+	int *C_x,*C_y;
+	int NumCoins;
+	input.open("Text.txt");
+	if(!input.fail()){
+		input>>s; cout<<s<<endl;
+		for (int i=0;i<rows;i++)
+			for(int j=0;j<columns;j++)
+				input>>grid[i][j];
+		input>>s;
+		input>>start_x>>start_y;cout<<start_x<<" "<<start_y<<endl;
+		input>>s;
+		input>>target_x>>target_y;cout<<target_x<<" "<<target_y<<endl;
+		input>>s;
+		input>>t;cout<<t<<endl;
+		input>>s;
+		input>>NumEnemies;cout<<NumEnemies<<endl;
+		B_x=new int[NumEnemies];
+		B_y=new int[NumEnemies];
+		for(int i=0;i<NumEnemies;i++){
+			input>>B_x[i]>>B_y[i];
+			
+			cout<<B_x[i]<<" "<<B_y[i]<<endl;
+		}
+
+		input>>s;
+		input>>NumCoins;
+		C_x=new int[NumCoins];
+		C_y=new int[NumCoins];
+		for(int i=0;i<NumCoins;i++)
+			input>>C_x[i]>>C_y[i];
+		input.close();
+	}
+	for (int i=0;i<rows;i++){
+			for(int j=0;j<columns;j++)
+				cout<<grid[i][j];
+			cout<<endl;
+	}
+	if(checkM(grid,1,1,target_x,target_y)) cout<<"YES"<<endl;
+	else cout<<"NO"<<endl;
+
+	system("pause");
+
+	return 0;
+}
