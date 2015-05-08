@@ -18,6 +18,9 @@ bool checkM( char M[][columns], int i, int j, int t_i, int t_j);
 
 
 int main(){
+	enum direction{down,left,right,up};
+	int posX=1,posY=down;
+	float framecounter=0,framelimit=500,frameswitch=100;
 	ifstream input;
 	string s;
 	int start_x,start_y,target_x,target_y;
@@ -25,6 +28,8 @@ int main(){
 	int *B_x,*B_y;
 	int *C_x,*C_y;
 	int NumCoins;
+	Clock clock1;
+	int flagpressed=0;
 
 	input.open("Text.txt");
 	if(!input.fail()){
@@ -99,17 +104,21 @@ int main(){
 					wall[i][j].setPosition(j*50,i*50); 
 					wall[i][j].setScale(sf::Vector2f(1,1));
 					wall[i][j].setTexture(walltxture);
-						cout<<i<<j<<endl;
 				}if(grid[i][j]=='.'){
 					
 					floor[i][j].setPosition(j*50,i*50); 
 					floor[i][j].setScale(sf::Vector2f(1,1));
 					floor[i][j].setTexture(floortxture);
-					cout<<i<<j<<endl;
 						}
 					}
 				}
-
+		Sprite player;
+		Texture ptxture;
+		if(!ptxture.loadFromFile("player.png")){
+	cout<<"error cannot load background"<<endl;
+	}
+		player.setTexture(ptxture);
+		player.setPosition(60,60);
 
 		while (maze.isOpen()){
 	
@@ -119,18 +128,59 @@ int main(){
 	case Event::Closed:
 	maze.close();
 	break;
+	case Event::KeyPressed:
+	switch(game.key.code)
+	{
+		if(Keyboard::isKeyPressed){
+	case Keyboard::Up:
+		posY=up;
+		player.move(0,-25);
+		flagpressed=1;
+		break;
+	case Keyboard::Down:
+		posY=down;
+		player.move(0,+25);
+		flagpressed=1;
+		break;
+	case Keyboard::Left:
+		posY=left;
+		player.move(-25,0);
+		flagpressed=1;
+		break;
+	case Keyboard::Right:
+		posY=right;
+		player.move(+25,0);
+		flagpressed=1;
+		break;
+
+		}
+			}
 		}
 	}
 	
-	for(int i=0;i<rows;i++){
+
+	framecounter+=framelimit*clock1.restart().asSeconds();
+	if(framecounter>=frameswitch && flagpressed==1){
+		framecounter=0;
+	posX++;
+	if(posX*32>=ptxture.getSize().x){
+		posX=0;
+	}
+	flagpressed=0;
+	}
+
+
+		for(int i=0;i<rows;i++){
 		for(int j=0; j<columns; j++){
 				maze.draw(floor[i][j]);
 				maze.draw(wall[i][j]);	
-				
-						}
-		
-					}
+		}
+	}
+
+	player.setTextureRect(IntRect(posX*32,posY*32,32,32));
+	maze.draw(player);
 	maze.display();
+	maze.clear();
 
 	
 }
