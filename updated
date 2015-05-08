@@ -20,7 +20,7 @@ bool checkM( char M[][columns], int i, int j, int t_i, int t_j);
 int main(){
 	enum direction{down,left,right,up};
 	int posX=1,posY=down;
-	float framecounter=0,framelimit=59,frameswitch=10;
+	float framecounter=0,framelimit=59,frameswitch=5;
 	ifstream input;
 	string s;
 	int start_x,start_y,target_x,target_y;
@@ -187,6 +187,7 @@ int main(){
 	maze.draw(player);
 	maze.display();
 	maze.clear();
+	x=x%60+1;
 
 	
 }
