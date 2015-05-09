@@ -32,7 +32,7 @@ int main(){
 	int flagpressed=0;
 	int x=0;
 	int y=0;
-	int p,k=p=0;
+	double p,k=p=0;
 
 	input.open("Text.txt");
 	if(!input.fail()){
@@ -105,12 +105,12 @@ int main(){
 	  	for (int i=0;i<rows;i++){
 			for(int j=0;j<columns;j++){
 				if(grid[i][j]=='#'){
-					wall[i][j].setPosition(j*50,i*50); 
+					wall[i][j].setPosition(j*32,i*32); 
 					wall[i][j].setScale(sf::Vector2f(1,1));
 					wall[i][j].setTexture(walltxture);
 				}if(grid[i][j]=='.'){
 					
-					floor[i][j].setPosition(j*50,i*50); 
+					floor[i][j].setPosition(j*32,i*32); 
 					floor[i][j].setScale(sf::Vector2f(1,1));
 					floor[i][j].setTexture(floortxture);
 						}
@@ -122,12 +122,12 @@ int main(){
 	cout<<"error cannot load background"<<endl;
 	}
 		player.setTexture(ptxture);
-		player.setPosition(60,60);
+		player.setPosition(32,32);
 
 		while (maze.isOpen()){
 	
 	Event game;
-	while(maze.pollEvent(game)){
+	while(maze.pollEvent(game)&&flagpressed==0){
 		switch (game.type){
 	case Event::Closed:
 	maze.close();
@@ -138,22 +138,22 @@ int main(){
 		if(Keyboard::isKeyPressed){
 	case Keyboard::Up:
 		posY=up;
-		k=-25;p=0;
+		k=-3.2;p=0;
 		flagpressed=1;
 		break;
 	case Keyboard::Down:
 		posY=down;
-		k=25;p=0;
+		k=3.2;p=0;
 		flagpressed=1;
 		break;
 	case Keyboard::Left:
 		posY=left;
-		p=-25;k=0;
+		p=-3.2;k=0;
 		flagpressed=1;
 		break;
 	case Keyboard::Right:
 		posY=right;
-		p=25;k=0;
+		p=3.2;k=0;
 		flagpressed=1;
 		break;
 
@@ -164,10 +164,11 @@ int main(){
 	
 
 	framecounter+=framelimit*clock1.restart().asSeconds();
-	if(framecounter>=frameswitch && flagpressed==1){
+	if(framecounter>=frameswitch && flagpressed==1&&y<10){
 		framecounter=0;
 		posX++;
-		player.move(p/5,k/5);
+		player.move(p,k);
+		y+=y%10+1
 	if(posX*32>=ptxture.getSize().x){
 		posX=0;
 	}
