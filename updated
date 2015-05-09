@@ -15,7 +15,27 @@ const int rows=12;
 
 bool checkM( char M[][columns], int i, int j, int t_i, int t_j);
 
-
+bool isValid( char scene[][12], int i, int j, int move){
+	int x=i,y=j;
+	switch(move){
+	case 1: y++; break;
+	case 2: y--; break;
+	case 3: x--; break;
+	case 4: x++; break;
+	}
+	cout<<scene[i][j]<<endl<<scene[x][y]<<endl;
+	if(int(scene[i][j]-scene[x][y])==int('.')-int('#'))
+		return false;
+	return true;
+}
+void updatePosition( int &x, int &y, int move){
+	switch(move){
+	case 1: y++; break;
+	case 2: y--; break;
+	case 3: x--; break;
+	case 4: x++; break;
+	}
+}
 
 int main(){
 	enum direction{down,left,right,up};
@@ -35,6 +55,8 @@ int main(){
 	int x=0;
 	int y=0;
 	double p,k=p=0;
+	int move=0;
+	bool validmove=false;
 
 	input.open("Text.txt");
 	if(!input.fail()){
@@ -144,27 +166,28 @@ int main(){
 		if(Keyboard::isKeyPressed){
 	case Keyboard::Up:
 		posY=up;
-		k=-3.2;p=0;x=0;y=0;
+		k=-3.2;p=0;x=0;y=0;move=3;
 		flagpressed=1;
 		break;
 	case Keyboard::Down:
 		posY=down;
-		k=3.2;p=0;x=0;y=0;
+		k=3.2;p=0;x=0;y=0;move=4;
 		flagpressed=1;
 		break;
 	case Keyboard::Left:
 		posY=left;
-		p=-3.2;k=0;x=0;y=0;
+		p=-3.2;k=0;x=0;y=0;move=2;
 		flagpressed=1;
 		break;
 	case Keyboard::Right:
 		posY=right;
-		p=3.2;k=0;x=0;y=0;
+		p=3.2;k=0;x=0;y=0;move=1;
 		flagpressed=1;
 		break;
 
 		}
 			}
+		if(isValid(grid, start_x,start_y, move)){validmove=true;updatePosition(start_x,start_y,move);}
 		}
 	}
 	
@@ -172,7 +195,7 @@ int main(){
 	framecounter+=framelimit*clock1.restart().asSeconds();
 	
 
-	
+	if(validmove){
 	if(framecounter>=frameswitch && flagpressed==1&&y<10){
 			framecounter=0;
 			posX++;
@@ -182,7 +205,10 @@ int main(){
 		posX=0;
 		}
 	}
-	if(x==60){
+	else{x=x+20;}
+	}
+	if(x>=60){
+		y=0;validmove=false;
 		flagpressed=0;
 	}
 
