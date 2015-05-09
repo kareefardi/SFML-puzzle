@@ -168,7 +168,7 @@ int main(){
 		framecounter=0;
 		posX++;
 		player.move(p,k);
-		y+=y%10+1
+		y=y%10+1
 	if(posX*32>=ptxture.getSize().x){
 		posX=0;
 	}
