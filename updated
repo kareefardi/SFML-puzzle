@@ -138,22 +138,22 @@ int main(){
 		if(Keyboard::isKeyPressed){
 	case Keyboard::Up:
 		posY=up;
-		k=-3.2;p=0;
+		k=-3.2;p=0;x=0;
 		flagpressed=1;
 		break;
 	case Keyboard::Down:
 		posY=down;
-		k=3.2;p=0;
+		k=3.2;p=0;x=0;
 		flagpressed=1;
 		break;
 	case Keyboard::Left:
 		posY=left;
-		p=-3.2;k=0;
+		p=-3.2;k=0;x=0;
 		flagpressed=1;
 		break;
 	case Keyboard::Right:
 		posY=right;
-		p=3.2;k=0;
+		p=3.2;k=0;x=0;
 		flagpressed=1;
 		break;
 
