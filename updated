@@ -90,9 +90,9 @@ int main(){
 		
 		for(int i=0;i<NumCoins;i++){
 			input>>C_x[i]>>C_y[i];
-		input.close();
+		
 	}
-	
+	input.close();
 		for (int i=0;i<rows;i++){
 			for(int j=0;j<columns;j++)
 				cout<<grid[i][j];
@@ -135,14 +135,15 @@ int main(){
 					}
 				}
 
-			Sprite	coin;
+		Sprite	coin[20];
 		Texture cointxture;
 		if(!cointxture.loadFromFile("coin.png")){
 	cout<<"error cannot load background"<<endl;
 	}
-		coin.setTexture(cointxture);
-		coin.setPosition(32*5,32);
-		
+		for (int i=0;i<NumCoins;i++){
+				coin[i].setTexture(cointxture);
+				coin[i].setPosition(C_x[i]*32,C_y[i]*32);
+			}
 		Sprite player;
 		Texture ptxture;
 		if(!ptxture.loadFromFile("player.png")){
@@ -196,7 +197,7 @@ int main(){
 	
 
 	if(validmove){
-	if(framecounter>=frameswitch && flagpressed==1&&y<10){
+	if(framecounter>=frameswitch && flagpressed==1&&y<10 ){
 			framecounter=0;
 			posX++;
 			player.move(p,k);
@@ -207,6 +208,7 @@ int main(){
 	}
 	}
 	else{x=x+20;}
+	
 	if(x>=60){
 		y=0;validmove=false;
 		flagpressed=0;
@@ -220,6 +222,7 @@ int main(){
 		}
 	}
 
+		
 		framecounter1+=framelimit1*clock1.restart().asSeconds();
 		if(framecounter1>=frameswitch1){
 			framecounter1=0;
@@ -227,10 +230,13 @@ int main(){
 	if(coinX>=7){
 		coinX=0;
 	}
+}			
+		for (int i=0;i<NumCoins;i++){
+		coin[i].setTextureRect(IntRect(coinX*32,0,32,32));
+	maze.draw(coin[i]);
 		}
+
 	player.setTextureRect(IntRect(posX*32,posY*32,32,32));
-	coin.setTextureRect(IntRect(coinX*32,0,32,32));
-	maze.draw(coin);
 	maze.draw(player);
 	maze.display();
 	maze.clear();
