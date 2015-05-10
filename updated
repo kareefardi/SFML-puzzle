@@ -78,6 +78,7 @@ int main(){
 	int coincounter=0;
 	string coincounter_s="0";
 	string Numcoin_s="0";
+	int coinpoint=0;
 
 	input.open("Text.txt");
 	if(!input.fail()){
@@ -127,9 +128,6 @@ int main(){
 		cout<<"NO"<<endl;
 	}
 
-	for(int i=0;i<NumCoins;i++){
-		coincheck[i]=true;
-	}
 
 	RenderWindow maze(VideoMode(800,800),"maze beta");
 	Sprite wall[12][12],floor[12][12];
@@ -147,9 +145,15 @@ int main(){
 
 	Text counter;
 	counter.setFont(font);
-	counter.setString("Count"+' '+coincounter_s+" / "+Numcoin_s);
-	counter.setPosition(100,700);
-	counter.setCharacterSize(50);
+	counter.setString("Coins "+' '+coincounter_s+" / "+Numcoin_s);
+	counter.setPosition(200,400);
+	counter.setCharacterSize(30);
+
+	Text Win;
+	Win.setFont(font);
+	Win.setString("YOU WIN!!!");
+	Win.setPosition(200,450);
+	Win.setCharacterSize(30);
 
 	  	for (int i=0;i<rows;i++){
 			for(int j=0;j<columns;j++){
@@ -175,6 +179,11 @@ int main(){
 				coin[i].setTexture(cointxture);
 				coin[i].setPosition(C_x[i]*32,C_y[i]*32);
 			}
+
+			for(int i=0;i<NumCoins;i++){
+		coincheck[i]=true;
+	}
+
 		Sprite player;
 		Texture ptxture;
 		if(!ptxture.loadFromFile("player.png")){
@@ -271,18 +280,23 @@ int main(){
 		for (int i=0;i<NumCoins;i++){
 			if(coincheck[i]==true)
 			{
+				
 				coin[i].setTextureRect(IntRect(coinX*32,0,32,32));
 				maze.draw(coin[i]);
 			}
 			if(iscoin(coincheck,C_x[i]*32,C_y[i]*32,player.getPosition().x+16,player.getPosition().y+16,NumCoins)==true){
+				coinpoint=1;
 				coincheck[i]=false;
+				C_x[i]=0;
+				C_y[i]=0;
 				coincounter++;
+				
 			}
 			
 		}
-		
-
-	
+		if (coincounter==NumCoins){
+			maze.draw(Win);
+		}
 
 	player.setTextureRect(IntRect(posX*32,posY*32,32,32));
 	maze.draw(player);
@@ -292,7 +306,7 @@ int main(){
 	x=x%60+2;
 	coincounter_s=to_string(coincounter);
 	Numcoin_s=to_string(NumCoins);
-	counter.setString("Count"+' '+coincounter_s+'/'+Numcoin_s);
+	counter.setString("Coins: "+coincounter_s+'/'+Numcoin_s);
 
 	
 }
