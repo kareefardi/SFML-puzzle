@@ -15,6 +15,21 @@ const int rows=12;
 
 bool checkM( char M[][columns], int i, int j, int t_i, int t_j);
 
+bool iscoin(bool coinarray[],int cposx,int cposy,int plposx,int plposy,int numcoins){
+	cposx/=32;
+	cposy/=32;
+	plposx/=32;
+	plposy/=32;
+	for (int i=0;i<=numcoins;i++){
+	if(cposx==plposx && cposy==plposy)
+	{
+		return true;
+	}
+	return false;
+	}
+
+}
+
 bool isValid( char scene[][12], int i, int j, int move){
 	int x=i,y=j;
 	switch(move){
@@ -57,6 +72,12 @@ int main(){
 	double p,k=p=0;
 	int move=0;
 	bool validmove=false;
+	bool coinfound=false;
+	int cposx,cposy;
+	bool coincheck[20];
+	int coincounter=0;
+	string coincounter_s="0";
+	string Numcoin_s="0";
 
 	input.open("Text.txt");
 	if(!input.fail()){
@@ -106,7 +127,9 @@ int main(){
 		cout<<"NO"<<endl;
 	}
 
-
+	for(int i=0;i<NumCoins;i++){
+		coincheck[i]=true;
+	}
 
 	RenderWindow maze(VideoMode(800,800),"maze beta");
 	Sprite wall[12][12],floor[12][12];
@@ -119,7 +142,15 @@ int main(){
 	if(!floortxture.loadFromFile("floor.png")){
 	cout<<"error cannot load background"<<endl;
 	}
-	
+	Font font;
+	if (!font.loadFromFile("arial.ttf"));
+
+	Text counter;
+	counter.setFont(font);
+	counter.setString("Count"+' '+coincounter_s+" / "+Numcoin_s);
+	counter.setPosition(100,700);
+	counter.setCharacterSize(50);
+
 	  	for (int i=0;i<rows;i++){
 			for(int j=0;j<columns;j++){
 				if(grid[i][j]=='#'){
@@ -188,7 +219,12 @@ int main(){
 
 		}
 			}
-		if(isValid(grid, start_x,start_y, move)){validmove=true;updatePosition(start_x,start_y,move);}
+		if(isValid(grid, start_x,start_y, move))
+		{
+			validmove=true;
+			updatePosition(start_x,start_y,move);
+			
+			}
 		}
 	}
 	
@@ -230,17 +266,33 @@ int main(){
 	if(coinX>=7){
 		coinX=0;
 	}
-}			
+}		
+		maze.draw(counter);	
 		for (int i=0;i<NumCoins;i++){
-		coin[i].setTextureRect(IntRect(coinX*32,0,32,32));
-	maze.draw(coin[i]);
+			if(coincheck[i]==true)
+			{
+				coin[i].setTextureRect(IntRect(coinX*32,0,32,32));
+				maze.draw(coin[i]);
+			}
+			if(iscoin(coincheck,C_x[i]*32,C_y[i]*32,player.getPosition().x+16,player.getPosition().y+16,NumCoins)==true){
+				coincheck[i]=false;
+				coincounter++;
+			}
+			
 		}
+		
+
+	
 
 	player.setTextureRect(IntRect(posX*32,posY*32,32,32));
 	maze.draw(player);
+	maze.draw(counter);
 	maze.display();
 	maze.clear();
 	x=x%60+2;
+	coincounter_s=to_string(coincounter);
+	Numcoin_s=to_string(NumCoins);
+	counter.setString("Count"+' '+coincounter_s+'/'+Numcoin_s);
 
 	
 }
